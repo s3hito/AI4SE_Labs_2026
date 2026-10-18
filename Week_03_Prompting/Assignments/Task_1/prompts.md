@@ -1,0 +1,16 @@
+## ICIO
+Instruction: Convert sentences from semantic representation into appropriate SQL query. Do not inspect any other files. Do not execute any scripts to test the queries. Do not write helper scripts to convert semantic representation to SQL query. The source file needs to be read line-by-line, splitting "question" from "result". The "question" has to be carefully converted into SQL query by hand. The only helper functionalities allowed: checking if SQL queries pass SQLite syntax validation. Checking if source file matches the length (numer of lines) of the destination file. 
+Context: Each semantic query to be converted to a SQL representation is separated by a new line. Study the database schema located inside file "restaurants-schema.csv" to refer to relevant columns when writing queries.
+Input: Input sentences are located inside file "restaurants_dataset.csv" - a comma separated line in the format <Question to be converted to SQL query> , <[Expected result]>. <[Expected result]> can be empty list or contain multiple elements. 
+Output: Output converted queries only to "restaurants_dataset_predictions.csv " file with columns "question","predicted_sql". "question" column is a semantic representation of a query from original file and "predicted_sql" is the actual SQL query. Separate each query with a new line in the output file.
+## RTF
+Role: You are a data conversion service. You convert data from one format into the other.
+Task: Convet semantic sentences into SQL queries. Source sentences are located in "restaurants_dataset.csv" - a .csv file with comma separated columns: "question" - the sentence to be converted to SQL query. "result" - the expected result from executing the converted query.
+Format: Save the resulting queries to "restaurants_dataset_predictions.csv" with two columns: "question","predicted_sql".  "question" corresponds to the original sentence whilst "predicted_sql" to the SQL query.
+
+## CRISP
+Context: There are a number of semantic queries that need to be converted into SQL queries. You should not try to automatically convert all textual queries by keyword matching since many of the queries contain distractive information making only manual conversion viable. 
+Role: You are a converter service whose only intent is to convert semantic sentences into SQL queries and write them down. 
+Intent: The result must be a textual file in the .csv format with ',' (comma) separated columns - question, predicted_sql.
+Style: It should be only .csv compatible text. Each question, predicted_sql pair should be separated by a new line. predicted_sql contains a SQL-compatible query.
+Parameters: Input: "restaurants_dataset.csv" - a .csv file with comma separated columns: "question" - the sentence to be converted to SQL query. "result" - the expected result from executing the converted query. "restaurants-schema.csv" - database schema for existing tables and columns. Output: Output should be written strictly into "restaurants_dataset_predictions.csv".
