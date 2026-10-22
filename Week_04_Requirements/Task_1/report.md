@@ -16,4 +16,4 @@ reviewer (LLM, gpt-4o-mini) - checks completeness
 
 render_doc (deterministic) - Writes the final single .md document
 
-With this in mind it's fair to say that with the amount of time that has been spent on this 'lab' that my disappointment is immesurable and my day is ruined.
+With this in mind it's fair to say that with the amount of time that has been spent on this 'lab' my disappointment is immesurable and my day is ruined.

@@ -1,5 +1,5 @@
 from IPython.display import Image, display
-import os
+import os, sys
 from dotenv import load_dotenv
 load_dotenv()
 for variable in (
@@ -59,10 +59,15 @@ class MissingItem(BaseModel):
 class ReviewResult(BaseModel):
     missing: list[MissingItem]
 
+structured_llm = ChatOpenAI(model="gpt-4.1-nano").with_structured_output(ExtractionResult)
+dedup_llm = ChatOpenAI(model="gpt-5-mini").with_structured_output(DedupResult)
+resolver_llm = ChatOpenAI(model="gpt-5.4-nano").with_structured_output(ConflictResult)
+reviewer_llm = ChatOpenAI(model="gpt-4o-mini").with_structured_output(ReviewResult)
+priority_llm = ChatOpenAI(model="gpt-5-mini").with_structured_output(PriorityResult)
 
 def load_docs(state: State) -> dict: #Deterministic node
     docs = {}
-    root = './data/corpus/' #state["input_dir"]
+    root = state["input_dir"]
     for path in sorted(glob.glob(os.path.join(root, "**", "*.eml"), recursive=True)):
         if os.path.isfile(path):
             with open(path, encoding="utf-8", errors="replace") as f:
@@ -270,4 +275,7 @@ g.add_conditional_edges("reviewer", route, {"retry": "extractor", "done": "rende
 g.add_edge("render_doc", END)
 app = g.compile()
 display(Image(app.get_graph().draw_mermaid_png()))
-out = app.invoke({'docs':{}, 'raw_reqs':[], 'blacklist': [], 'kept_reqs': [], 'review_missing': {}, 'iterations': 0})
+if __name__ == "__main__":
+    out = app.invoke({"input_dir": sys.argv[1], 'docs':{}, 'raw_reqs':[], 'blacklist': [], 'kept_reqs': [], 'review_missing': {}, 'iterations': 0})
+    for r in out["raw_reqs"]:
+        print(r["sources"], "|", r["name"])
